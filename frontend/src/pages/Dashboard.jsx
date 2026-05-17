@@ -114,22 +114,30 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [workspaces, setWorkspaces] = useState([]);
   
+  // Pagination & Filters
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [sortBy, setSortBy] = useState('createdAt');
+  const [sortDesc, setSortDesc] = useState(true);
+  
   // Modal states
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [newTask, setNewTask] = useState({ title: '', description: '', status: 'TODO', priority: 'MEDIUM' });
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page, sortBy, sortDesc]);
 
   const fetchData = async () => {
     try {
       const [wsRes, taskRes] = await Promise.all([
         api.get('/workspaces'),
-        api.get('/tasks')
+        api.get(`/tasks?page=${page}&limit=50&sortBy=${sortBy}&sortDesc=${sortDesc}`)
       ]);
-      setWorkspaces(wsRes.data);
-      setTasks(taskRes.data);
+      setWorkspaces(wsRes.data.data || wsRes.data);
+      const fetchedTasks = taskRes.data.data || taskRes.data;
+      setTasks(fetchedTasks);
+      setTotalPages(taskRes.data.totalPages || 1);
     } catch (err) {
       console.error('Failed to fetch data', err);
     }
@@ -212,7 +220,7 @@ const Dashboard = () => {
         </header>
 
         {/* Basic Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 p-6 rounded-2xl shadow-sm">
             <h3 className="text-gray-400 font-medium text-sm uppercase tracking-wider mb-2">Active Tasks</h3>
             <p className="text-4xl font-black text-white">{activeTasks.length}</p>
@@ -225,6 +233,27 @@ const Dashboard = () => {
             <h3 className="text-gray-400 font-medium text-sm uppercase tracking-wider mb-2">Workspaces</h3>
             <p className="text-4xl font-black text-blue-400">{workspaces.length}</p>
           </div>
+        </div>
+        
+        {/* Filters and Controls */}
+        <div className="flex justify-between items-center mb-8 gap-4 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
+           <div className="flex items-center gap-4">
+              <span className="text-sm font-semibold text-gray-500 uppercase tracking-wilder">Sort By:</span>
+              <select className="bg-gray-800 border border-gray-700 text-sm text-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-blue-500 outline-none" value={sortBy} onChange={e => setSortBy(e.target.value)}>
+                 <option value="createdAt">Date Created</option>
+                 <option value="priority">Priority</option>
+                 <option value="title">Title</option>
+              </select>
+              <button onClick={() => setSortDesc(!sortDesc)} className="text-sm bg-gray-800 border border-gray-700 p-2 rounded-lg hover:bg-gray-700 transition font-medium">
+                 {sortDesc ? 'Descending ▼' : 'Ascending ▲'}
+              </button>
+           </div>
+           
+           <div className="flex items-center gap-2">
+             <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="px-3 py-1 bg-gray-800 border border-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-700">Prev</button>
+             <span className="text-sm text-gray-400">Page {page} of {Math.max(1, totalPages)}</span>
+             <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} className="px-3 py-1 bg-gray-800 border border-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-700">Next</button>
+           </div>
         </div>
 
         {/* Task Boards Grid */}
@@ -298,6 +327,32 @@ const Dashboard = () => {
                         <div>
                             <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Description</label>
                             <textarea className="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-white outline-none transition-all min-h-[100px]" placeholder="Add details..." value={newTask.description} onChange={e => setNewTask({...newTask, description: e.target.value})}></textarea>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Priority</label>
+                            <select className="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 text-white outline-none" value={newTask.priority} onChange={e => setNewTask({...newTask, priority: e.target.value})}>
+                                <option value="LOW">Low</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HIGH">High</option>
+                                <option value="URGENT">Urgent</option>
+                            </select>
+                        </div>
+
+                        <div className="flex justify-end gap-3 mt-4">
+                            <button type="button" onClick={() => setShowTaskModal(false)} className="px-5 py-2.5 text-gray-400 hover:text-white transition-colors font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-500/20 font-medium transition-all">Create Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        )}
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;
                         </div>
                         
                         <div>
