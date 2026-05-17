@@ -353,29 +353,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-                        </div>
-                        
-                        <div>
-                            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Priority</label>
-                            <select className="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-white outline-none transition-all" value={newTask.priority} onChange={e => setNewTask({...newTask, priority: e.target.value})}>
-                                <option value="LOW">Low</option>
-                                <option value="MEDIUM">Medium</option>
-                                <option value="HIGH">High</option>
-                                <option value="URGENT">Urgent</option>
-                            </select>
-                        </div>
-                        
-                        <div className="flex justify-end gap-3 mt-6">
-                            <button type="button" onClick={() => setShowTaskModal(false)} className="px-5 py-2.5 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-gray-800 transition-colors">Cancel</button>
-                            <button type="submit" className="px-5 py-2.5 rounded-xl font-medium bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20 transition-all">Create Task</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        )}
-      </main>
-    </div>
-  );
-};
-
-export default Dashboard;
