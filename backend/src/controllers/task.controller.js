@@ -5,7 +5,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 // @route   GET /api/tasks
 // @access  Private
 export const getTasks = asyncHandler(async (req, res) => {
-  const { status, priority, sortBy, sortOrder } = req.query;
+  const { status, priority, sortBy, sortOrder, page = 1, limit = 10 } = req.query;
   
   const where = {
     workspace: {
@@ -25,18 +25,33 @@ export const getTasks = asyncHandler(async (req, res) => {
      orderBy.createdAt = 'desc';
   }
 
-  const tasks = await prisma.task.findMany({
-    where,
-    include: {
-      assignee: { select: { id: true, name: true, avatar: true } },
-      creator: { select: { id: true, name: true } },
-      attachments: true,
-      _count: { select: { comments: true, attachments: true } }
-    },
-    orderBy
-  });
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+  const take = parseInt(limit);
 
-  res.json({ success: true, data: tasks });
+  const [total, tasks] = await prisma.$transaction([
+    prisma.task.count({ where }),
+    prisma.task.findMany({
+      where,
+      include: {
+        assignee: { select: { id: true, name: true, avatar: true } },
+        creator: { select: { id: true, name: true } },
+        attachments: true,
+        _count: { select: { comments: true, attachments: true } }
+      },
+      orderBy,
+      skip,
+      take
+    })
+  ]);
+
+  res.json({ 
+      success: true, 
+      count: tasks.length,
+      total,
+      page: parseInt(page),
+      totalPages: Math.ceil(total / take),
+      data: tasks 
+  });
 });
 
 // @desc    Create a task

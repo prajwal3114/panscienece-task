@@ -30,10 +30,12 @@ app.use(morgan('dev'));
 // API Routes (To be mounted)
 import authRoutes from './routes/auth.routes.js';
 import taskRoutes, { workspaceRouter } from './routes/task.routes.js';
+import userRoutes from './routes/user.routes.js';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/workspaces', workspaceRouter);
+app.use('/api/users', userRoutes);
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Task API is running.' });
