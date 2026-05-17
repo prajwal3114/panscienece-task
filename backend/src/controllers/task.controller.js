@@ -5,7 +5,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 // @route   GET /api/tasks
 // @access  Private
 export const getTasks = asyncHandler(async (req, res) => {
-  const { status, priority, sortBy, sortOrder, page = 1, limit = 10 } = req.query;
+  const { status, priority, sortBy, sortDesc, page = 1, limit = 10 } = req.query;
   
   const where = {
     workspace: {
@@ -20,7 +20,7 @@ export const getTasks = asyncHandler(async (req, res) => {
   
   const orderBy = {};
   if (sortBy) {
-     orderBy[sortBy] = sortOrder === 'asc' ? 'asc' : 'desc';
+     orderBy[sortBy] = sortDesc === 'false' ? 'asc' : 'desc';
   } else {
      orderBy.createdAt = 'desc';
   }
