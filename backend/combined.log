@@ -39,3 +39,7 @@
 {"level":"info","message":"Server running in development mode on port 5000","timestamp":"2026-05-17T12:13:02.022Z"}
 {"level":"info","message":"Server running in development mode on port 5000","timestamp":"2026-05-17T12:16:16.504Z"}
 {"level":"info","message":"Server running in development mode on port 5000","timestamp":"2026-05-17T12:25:56.370Z"}
+{"level":"info","message":"Server running in development mode on port 5000","timestamp":"2026-05-17T12:26:04.545Z"}
+{"level":"info","message":"Server running in development mode on port 5000","timestamp":"2026-05-17T12:26:31.432Z"}
+{"level":"info","message":"Server running in development mode on port 5000","timestamp":"2026-05-17T12:26:39.418Z"}
+{"level":"error","message":"Error: Invalid email or password\n    at file:///C:/Users/PRAJWAL/OneDrive/Desktop/Panscience%20task/backend/src/controllers/auth.controller.js:90:11","timestamp":"2026-05-17T12:32:58.972Z"}

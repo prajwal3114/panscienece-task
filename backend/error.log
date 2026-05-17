@@ -12,3 +12,4 @@
 {"level":"error","message":"Error: Invalid email or password\n    at file:///C:/Users/PRAJWAL/OneDrive/Desktop/Panscience%20task/backend/src/controllers/auth.controller.js:90:11","timestamp":"2026-05-17T11:09:22.344Z"}
 {"level":"error","message":"Error: User already exists\n    at file:///C:/Users/PRAJWAL/OneDrive/Desktop/Panscience%20task/backend/src/controllers/auth.controller.js:16:11","timestamp":"2026-05-17T11:12:07.744Z"}
 {"level":"error","message":"Error: Invalid email or password\n    at file:///C:/Users/PRAJWAL/OneDrive/Desktop/Panscience%20task/backend/src/controllers/auth.controller.js:90:11","timestamp":"2026-05-17T11:12:25.269Z"}
+{"level":"error","message":"Error: Invalid email or password\n    at file:///C:/Users/PRAJWAL/OneDrive/Desktop/Panscience%20task/backend/src/controllers/auth.controller.js:90:11","timestamp":"2026-05-17T12:32:58.972Z"}
